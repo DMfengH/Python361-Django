@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-{% load staticfiles %}
+{% load staticfiles %}                          <!-- 告诉template，要加载static信息 -->
 
 <html lang="en">
 <head>
@@ -12,7 +12,7 @@
 <div> hey there partner!</div>
 <div>
     {% if categories %}
-    <ul>
+    <ul>                                        <!-- ul是创建无序列表 -->
         {% for category in categories %}
         <li>
             <a href="/rango/category/{{ category.slug }}">{{ category.name }}</a>
@@ -25,8 +25,11 @@
 </div>
 <div>
     <a href="/rango/about/">About</a><br/>
-    <img src="{% static 'images/rango.jpeg' %}"
-         alt="Picture of roadstor"/> <!-- New line -->
+    <img src="{% static 'images/roadster.jpg' %}"
+         alt="Picture of roadster"/>            <!-- New line --> <!-- 最后会合成为src="/static/images/rango.jpg" -->
+</div>
+<div>
+    <a href="/rango/add_category/">Add a New Category</a><br/>
 </div>
 </body>
 </html>

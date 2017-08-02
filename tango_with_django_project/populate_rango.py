@@ -1,9 +1,12 @@
 import os
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tango_with_django_project.settings')
+
 import django
 
 django.setup()
+# 以上几行是用来import整个project的setting。否则无法import新的models。
+
 from rango.models import Category, Page
 
 
@@ -23,11 +26,11 @@ def populate():
         {"title": "Bottle", "url": "http://bottlepy.org/docs/dev/"},
         {"title": "Flask", "url": "http://flask.pocco.org"}
     ]
-    cats = {"Python": {"pages": python_pages, "views": 128, "likes": 64},
+    cats = {"Python": {"pages": python_pages, "views": '128', "likes": '64'},
             "Django": {"pages": django_pages, "views": '64', "likes": '32'},
             "Other Frameworks": {"pages": other_pages, "views": '32', "likes": '16'}}
     for cat, cat_data in cats.items():
-        c = add_cat(cat, cat_data['views'], cat_data['likes'])
+        c = add_cat(cat, cat_data['views'], cat_data['likes'])  #
         for p in cat_data["pages"]:
             add_page(c, p["title"], p["url"])
 
@@ -37,7 +40,9 @@ def populate():
 
 
 def add_page(cat, title, url, views=0):
-    p = Page.objects.get_or_create(category=cat, title=title)[0]
+    p = Page.objects.get_or_create(category=cat, title=title)[0]  # 因为返回的是tuple，所以有个[0]
+    # get_or_create用来创建model instances，并且可以判断是否已经存在，若存在则返回该model，若不存在则创建一个新的。
+    # get_or_create返回一个tuple，包含两个元素第一个是该对象，第二个是该对象是否已经存在。
     p.url = url
     p.views = views
     p.save()
@@ -45,7 +50,7 @@ def add_page(cat, title, url, views=0):
 
 
 def add_cat(name, views, likes):
-    c = Category.objects.get_or_create(name=name)[0]
+    c = Category.objects.get_or_create(name=name)[0]    # 根据models中的Category创建一个实例
     c.views = views
     c.likes = likes
     c.save()

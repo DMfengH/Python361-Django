@@ -13,11 +13,14 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
-STATIC_DIR = os.path.join(BASE_DIR, 'static')
-MEDIA_DIR = os.path.join(BASE_DIR, 'media')
-
+# 一个os.path.dirname()代表路径再往上一层。
+# os.path.abspath()会将路径中的/变成\。
+# __file__ 会获得当前文件（即setting）所在路径，包括最后的setting.py
+# os.path.join 会根据系统不同，连接路径是使用不同符号，即Windows用\，UNIX中用/ 。
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # 设置本setting文件所在绝对路径
+TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')  # 在BASE_DIR路径后面添加templates,合成为新的路径。即template的路径
+STATIC_DIR = os.path.join(BASE_DIR, 'static')  # static的路径
+MEDIA_DIR = os.path.join(BASE_DIR, 'media')  # media的路径
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -30,7 +33,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -40,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rango',
+    'rango',  # 添加这句话告诉project，有了新的名字为rango的app。
 ]
 
 MIDDLEWARE = [
@@ -58,7 +60,7 @@ ROOT_URLCONF = 'tango_with_django_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATE_DIR, ],
+        'DIRS': [TEMPLATE_DIR, ],  # 这个字典里存放project的templates所在的路径（最好使用动态路径），TEMPLATE_DIR即为上面合成出来的路径。
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -66,7 +68,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.media',
+                'django.template.context_processors.media',  # 便于获得media的URL？
             ],
         },
     },
@@ -74,17 +76,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'tango_with_django_project.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.sqlite3',         # 自带的引擎
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),   # 数据库的路径位置目录
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -104,7 +104,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
@@ -118,22 +117,20 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-STATICFILES_DIRS = [STATIC_DIR, ]
-STATIC_URL = '/static/'
+STATICFILES_DIRS = [STATIC_DIR, ]  # 此列表，存放static的路径，以便被Django找到和使用。
+STATIC_URL = '/static/'  # 这个变量是表示可以获得的static的路径，前两个关于static的量是表示static的存储位置，有所不同。
 
 # Static files
-MEDIA_ROOT = MEDIA_DIR
-MEDIA_URL = '/media/'
-
-
+MEDIA_ROOT = MEDIA_DIR  # media存放的路径，以便被找到使用
+MEDIA_URL = '/media/'  # 后面的斜杠表示这是个路径，不是内容。
 
 # print(__file__)
 # print(os.path.dirname(__file__))
 # print(os.path.dirname(os.path.dirname(__file__)))
 # print(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# print(os.path.abspath(__file__))
 # print(TEMPLATE_DIR)
 # print(MEDIA_URL)
 # print(MEDIA_ROOT)

@@ -21,12 +21,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
-    url(r'^rango/', include('rango.urls')),
-    # above maps any URLs starting
-    # with rango/ to be handle by
-    # the rango applocation
-    url(r'^admin/', admin.site.urls),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+                  url(r'^$', views.index, name='index'),
+                  url(r'^rango/', include('rango.urls')),  # 这句话会匹配带有^rango/的URL，并且会去rango.urls文件中寻找URL中其余的部分。
+                  # above maps any URLs starting
+                  # with rango/ to be handle by
+                  # the rango applocation
+                  url(r'^admin/', admin.site.urls),
+              ] + static(settings.MEDIA_URL,
+                         document_root=settings.MEDIA_ROOT)  # 这句话告诉Django可以使用media_Url中的文件作为static content
 
 # print(urlpatterns)
