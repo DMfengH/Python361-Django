@@ -81,8 +81,8 @@ WSGI_APPLICATION = 'tango_with_django_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',         # 自带的引擎
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),   # 数据库的路径位置目录
+        'ENGINE': 'django.db.backends.sqlite3',  # 自带的引擎
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),  # 数据库的路径位置目录
     }
 }
 

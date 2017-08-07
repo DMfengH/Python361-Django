@@ -8,7 +8,10 @@ from rango.forms import CategoryForm
 def index(request):
     # return HttpResponse("Rango sats hey there partner!")  # 返回一句话（HttpResponse是一个要返回的对象）
     category_list = Category.objects.order_by('-likes')[:5]  # 获取Category对象按like的降序排列的前五个
-    context_dict = {'categories': category_list}  # 这里的categories和HTML中相同，会代替HTML中的。该字典的目的，即将具体信息传递给HTML。
+    page_list = Page.objects.order_by('-views')[:5]
+    context_dict = {'categories': category_list,
+                    'pages': page_list}  # 这里的categories和HTML中相同，会代替HTML中的。该字典的目的，即将具体信息传递给HTML。
+
     return render(request, 'rango/index.html', context_dict)  # render()函数将这三个信息综合到一起，然后返回给用户。
 
 
