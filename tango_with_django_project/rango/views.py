@@ -3,6 +3,7 @@ from rango.models import Category
 from django.http import HttpResponse
 from rango.models import Page
 from rango.forms import CategoryForm
+from rango.forms import PageForm
 
 
 def index(request):
@@ -34,7 +35,7 @@ def show_category(request, category_name_slug):
 
 
 def add_category(request):
-    form = CategoryForm()
+    form = CategoryForm()  # 调用forms文件中的CategoryForm
 
     if request.method == 'POST':
         form = CategoryForm(request.POST)
@@ -44,3 +45,25 @@ def add_category(request):
         else:
             print(form.errors)
     return render(request, 'rango/add_category.html', {'form': form})
+
+
+def add_page(request, category_name_slug):
+    try:
+        category = Category.objects.get(slug=category_name_slug)
+    except Category.DoesNotExist:
+        category = None
+
+    form = PageForm()
+    if request.method == 'POST':
+        form = PageForm(request.POST)
+        if form.is_valid():
+            if category:
+                page = form.save(commit=False)
+                page.category = category
+                page.views = 0
+                page.save()
+                return show_category(request, category_name_slug)
+        else:
+            print(form.errors)
+    context_dict = {'form': form, 'category': category}
+    return render(request, 'rango/add_page.html', context_dict)
