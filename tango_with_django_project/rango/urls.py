@@ -13,7 +13,8 @@ urlpatterns = [
     url(r'^about/', views.about, name='about'),
     url(r'^add_category/$', views.add_category, name='add_category'),
     url(r'^category/(?P<category_name_slug>[\w\-]+)/add_page/$', views.add_page, name='add_page'),
-    # 上一行使用<category_name_slug>和<category.slug>z都不正确
+    # 上一行使用<category_name_slug>和<category.slug>都不正确;
+    # 这个需要正则匹配的东西，会匹配出多个网页，在后面的HTML中可以用category.slug代表每一个。参见HTML实例。
     url(r'^category/(?P<category_name_slug>[\w\-]+)/$',
         views.show_category, name='show_category'),
 ]

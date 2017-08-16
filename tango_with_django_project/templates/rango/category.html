@@ -20,14 +20,12 @@
 {% else %}
 The specified category does not exist!
 {% endif %}
+<div>
+    <a href="{% url 'rango:index' %}">Index</a><br/>
+</div>
+<div>
+    <a href="{% url 'rango:add_page' category.slug %}">Add a New Page</a><br/>
+</div>
+
 {% endblock %}
-
-<!--
-<div>
-    <a href="/rango/">Index</a><br/>
-</div>
-<div>
-    <a href="/rango/category/{{ category.slug }}/add_page/">Add a New Page</a><br/>
-</div>
--->
-
+<!-- 如果间接地址中有变量，如category.slug。要像上面一样进行操作！ -->
