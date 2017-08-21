@@ -34,7 +34,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 # Application definition
-
+# 每次在下面这个列表里添加新APP都要进行一次migrate
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -88,13 +88,15 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
-
+# 下面列表中是进行密码验证的，可以设设置密码的基本要求
+# 第二项中的OPTIONDS是自己后添加的，可以限制密码最少为6位
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': { 'min_length': 6,}
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -103,6 +105,13 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+# 这个列表是自己后加进来的
+# 用来进行密码哈希算法的设置，默认会使用第一个，第一个不好用的时候会有第二个。
+PASSWORD_HASHERS = (
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+)
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
@@ -125,6 +134,9 @@ STATIC_URL = '/static/'  # 这个变量是表示可以获得的static的路径�
 # Static files
 MEDIA_ROOT = MEDIA_DIR  # media存放的路径，以便被找到使用
 MEDIA_URL = '/media/'  # 后面的斜杠表示这是个路径，不是内容。
+
+LOGIN_URL = '/rango/login/' # 当浏览需要登陆的网页时，若没有登陆要进行跳转到这个目录。
+
 
 # print(__file__)
 # print(os.path.dirname(__file__))

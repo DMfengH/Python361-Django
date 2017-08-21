@@ -1,6 +1,6 @@
 from django.db import models
 from django.template.defaultfilters import slugify
-
+from django.contrib.auth.models import User
 
 # 都继承于Django自带的Model base class（django.db.models.Model）
 class Category(models.Model):
@@ -29,3 +29,10 @@ class Page(models.Model):
 
     def __str__(self):  # 这句话很有用，没有它，当对对象使用print的时候，结果是<Category: Category object>，不显示名字。
         return self.title
+class UserProfile(models.Model):
+    user = models.OneToOneField(User)
+    website = models.URLField(blank=True)   # blank表示这两个可以为空白
+    # upload_to的值会和MEDIA_ROOT连在一起作为images的地址
+    picture = models.ImageField(upload_to='profile_images', blank=True)
+    def __str__(self):
+        return self.user.username
