@@ -8,17 +8,24 @@ from rango.forms import UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
-from django.contrib.auth .decorators import login_required
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
+from datetime import datetime
+
 
 def index(request):
     # return HttpResponse("Rango sats hey there partner!")  # 返回一句话（HttpResponse是一个要返回的对象）
     category_list = Category.objects.order_by('-likes')[:5]  # 获取Category对象按like的降序排列的前五个
     page_list = Page.objects.order_by('-views')[:5]
+    visits = int(request.COOKIES.get('visits', '1'))  # 这个东西是自己添加的，为了在HTML中显示visits的数值
     context_dict = {'categories': category_list,
-                    'pages': page_list}  # 这里的categories和HTML中相同，会代替HTML中的。该字典的目的，即将具体信息传递给HTML。
+                    'pages': page_list,
+                    'visits': visits, }  # 这里的categories和HTML中相同，会代替HTML中的。该字典的目的，即将具体信息传递给HTML。
 
-    return render(request, 'rango/index.html', context_dict)  # render()函数将这三个信息综合到一起，然后返回给用户。
+    # 将要返回的东西记录下来，然后和cookie处理一下，最后再返回
+    response = render(request, 'rango/index.html', context_dict)  # render()函数将这三个信息综合到一起，然后返回给用户。
+    visitor_cookie_handler(request, response)
+    return response
 
 
 def about(request):
@@ -39,6 +46,7 @@ def show_category(request, category_name_slug):
     return render(request, 'rango/category.html', context_dict)
 
 
+@login_required
 def add_category(request):
     form = CategoryForm()  # 调用forms文件中的CategoryForm
 
@@ -52,6 +60,7 @@ def add_category(request):
     return render(request, 'rango/add_category.html', {'form': form})
 
 
+@login_required  # 这是个django中的特殊函数，它下面的函数需要登陆的人才能看到。
 def add_page(request, category_name_slug):
     try:
         category = Category.objects.get(slug=category_name_slug)
@@ -111,16 +120,35 @@ def user_login(request):
             else:
                 return HttpResponse("Your Rango account is disables.")
         else:
-            print("Invalid login details: {0),{1}".format(username, password))
+            print("Invalid login details: {0},{1}".format(username, password))
             return HttpResponse("Invalid login details supplied.")
     else:
         return render(request, 'rango/login.html', {})
 
-@login_required
-def restricted(request):
-    return HttpResponse("Since you're logged in, you can see this text!")
 
 @login_required
-def user_logout(request):   # 登出
+def restricted(request):
+    return render(request, 'rango/restricted.html', {})
+    # return HttpResponse("Since you're logged in, you can see this text!")
+
+
+@login_required
+def user_logout(request):  # 登出
     logout(request)
     return HttpResponseRedirect(reverse('index'))
+
+
+def visitor_cookie_handler(request):
+    visits = int(request.COOKIES.get('visits', '1'))  # 获得cookie值，如果不存在获得默认值1
+
+    last_visit_cookie = request.COOKIES.get('last_visit', str(datetime.now()))
+    last_visit_time = datetime.strptime(last_visit_cookie[:-7], '%Y-%m-%d %H:%M:%S')
+
+    if (datetime.now() - last_visit_time).seconds > 0:  # 是否上次和本次浏览相差大于一天
+        visits = visits + 1
+        response.set_cookie('last_visit', str(datetime.now()))  # 第一个参数cookie的名字，第二个是它的值
+    else:
+        visits = 1
+        response.set_cookie('last_visit', last_visit_cookie)
+
+    response.set_cookie('visits', visits)
