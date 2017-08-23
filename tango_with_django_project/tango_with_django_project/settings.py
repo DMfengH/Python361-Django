@@ -137,6 +137,12 @@ MEDIA_URL = '/media/'  # 后面的斜杠表示这是个路径，不是内容。
 
 LOGIN_URL = '/rango/login/' # 当浏览需要登陆的网页时，若没有登陆要进行跳转到这个目录。
 
+# 设置 session的存活时间，ture代表browser_length;false代表persistent_session
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # 不设置等同于False
+
+# 设置cookie的存活时间，单位是秒
+# SESSION_COOKIE_AGE = 1209600 # 存活两周
+
 
 # print(__file__)
 # print(os.path.dirname(__file__))
