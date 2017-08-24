@@ -17,8 +17,8 @@ urlpatterns = [
     # 这个需要正则匹配的东西，会匹配出多个网页，在后面的HTML中可以用category.slug代表每一个。参见HTML实例。
     url(r'^category/(?P<category_name_slug>[\w\-]+)/$',
         views.show_category, name='show_category'),
-    url(r'^register/$', views.register, name='register'),
-    url(r'^login/$', views.user_login, name='login'),
+    # url(r'^register/$', views.register, name='register'),
+    # url(r'^login/$', views.user_login, name='login'),
     url(r'^restricted/', views.restricted, name='restricted'),
-    url(r'^logout/$', views.user_logout, name='logout'),
+    # url(r'^logout/$', views.user_logout, name='logout'),
 ]

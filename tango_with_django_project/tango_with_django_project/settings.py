@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rango',  # 添加这句话告诉project，有了新的名字为rango的app。
+    'registration'  # 添加了新的包【django-registration-redux==1.7】没有安装1.4版本,这个包是关于账号管理的一些东西
 ]
 
 MIDDLEWARE = [
@@ -96,7 +97,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-        'OPTIONS': { 'min_length': 6,}
+        'OPTIONS': {'min_length': 6, }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -111,7 +112,6 @@ PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
     'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
 )
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
@@ -135,13 +135,20 @@ STATIC_URL = '/static/'  # 这个变量是表示可以获得的static的路径�
 MEDIA_ROOT = MEDIA_DIR  # media存放的路径，以便被找到使用
 MEDIA_URL = '/media/'  # 后面的斜杠表示这是个路径，不是内容。
 
-LOGIN_URL = '/rango/login/' # 当浏览需要登陆的网页时，若没有登陆要进行跳转到这个目录。
+# LOGIN_URL = '/rango/login/'  # 当浏览需要登陆的网页时，若没有登陆要进行跳转到这个目录。
 
 # 设置 session的存活时间，ture代表browser_length;false代表persistent_session
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # 不设置等同于False
 
 # 设置cookie的存活时间，单位是秒
 # SESSION_COOKIE_AGE = 1209600 # 存活两周
+
+# 一些包【django-registration-redux==1.7】中带有的变量
+REGISTRATION_OPEN = True  # True表示用户可以注册
+ACCOUNT_ACTIVATION_DAYS = 7  # 账号被记录7天？
+REGISTRATION_AUTO_LOGIN = True  # True表示自动登陆
+LOGIN_REDIRECT_URL = '/rango/'  # 成功登陆后自动跳到的网页
+LOGIN_URL = '/accounts/login/'  # 和上面的重复，把上面的注释掉。
 
 
 # print(__file__)
